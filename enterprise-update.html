@@ -303,6 +303,27 @@ body {
 .ai-choice-features li::before { content:"✓"; position:absolute; left:0; color:#00A98F; font-weight:800; }
 .ai-common { display:flex; align-items:flex-start; gap:10px; margin-top:14px; padding:14px 16px; border:1px solid #E6EAF1; border-radius:14px; background:#F8F9FB; color:#737A86; font-size:12px; line-height:1.6; }
 .ai-common strong { color:#1F2329; white-space:nowrap; }
+.quote-plan-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
+.quote-plan-option { position:relative; cursor:pointer; }
+.quote-plan-option input { position:absolute; opacity:0; pointer-events:none; }
+.quote-plan-card { position:relative; height:100%; padding:25px; border:1.5px solid #DDE3EC; border-radius:22px; background:#FBFCFE; transition:border-color .18s,box-shadow .18s,transform .18s; }
+.quote-plan-option:hover .quote-plan-card { transform:translateY(-1px); border-color:#B8C9EC; }
+.quote-plan-option input:checked + .quote-plan-card { border-color:#3370FF; background:linear-gradient(145deg,#F2F6FF,#FFFFFF); box-shadow:0 14px 34px rgba(51,112,255,.12); }
+.quote-plan-card::after { content:""; position:absolute; top:24px; right:24px; width:19px; height:19px; border:2px solid #C6CCD6; border-radius:50%; background:#fff; box-sizing:border-box; }
+.quote-plan-option input:checked + .quote-plan-card::after { border:5px solid #3370FF; }
+.quote-plan-badge { display:inline-flex; padding:5px 10px; margin-bottom:12px; border-radius:999px; background:#EEF3FF; color:#3370FF; font-size:10px; font-weight:800; }
+.quote-plan-card.recommended .quote-plan-badge { color:#008E79; background:#E7F8F4; }
+.quote-plan-card h3 { padding-right:34px; font-size:20px; margin-bottom:6px; }
+.quote-plan-subtitle { color:#7A8290; font-size:12px; margin-bottom:14px; }
+.quote-plan-price { display:flex; align-items:baseline; gap:6px; margin-bottom:16px; }
+.quote-plan-price strong { color:#3370FF; font-size:34px; line-height:1; letter-spacing:-.6px; }
+.quote-plan-price span { color:#8F959E; font-size:12px; }
+.quote-formulas { display:grid; gap:7px; }
+.quote-formula { display:grid; grid-template-columns:1fr auto; gap:12px; padding:8px 10px; border-radius:10px; background:#F2F4F8; color:#596273; font-size:12px; }
+.quote-formula strong { color:#1F2329; }
+.quote-plan-rule { margin-top:13px; padding-top:12px; border-top:1px solid #E6EAF1; color:#646A73; font-size:11px; line-height:1.55; }
+.quote-plan-rule b { color:#3370FF; }
+.quote-plan-saving { margin-top:12px; padding:10px 12px; border-radius:11px; background:rgba(0,184,148,.08); color:#008E79; font-size:12px; font-weight:700; }
 .pcard-head {
   display: flex;
   justify-content: space-between;
@@ -971,6 +992,19 @@ body {
   .ai-choice-features li { padding:3px 0 3px 16px; font-size:10.5px; line-height:1.45; }
   .ai-common { display:block; margin-top:7px; padding:10px 11px; font-size:10px; line-height:1.5; }
   .ai-common strong { display:block; margin-bottom:2px; }
+  .quote-plan-grid { grid-template-columns:1fr; gap:9px; }
+  .quote-plan-card { padding:17px; border-radius:17px; }
+  .quote-plan-card::after { top:17px; right:17px; width:17px; height:17px; }
+  .quote-plan-badge { margin-bottom:8px; padding:4px 8px; font-size:9px; }
+  .quote-plan-card h3 { margin-bottom:3px; font-size:17px; }
+  .quote-plan-subtitle { margin-bottom:9px; font-size:10.5px; }
+  .quote-plan-price { margin-bottom:10px; }
+  .quote-plan-price strong { font-size:27px; }
+  .quote-plan-price span { font-size:10px; }
+  .quote-formulas { gap:5px; }
+  .quote-formula { padding:6px 8px; font-size:10.5px; }
+  .quote-plan-rule { margin-top:8px; padding-top:8px; font-size:10px; }
+  .quote-plan-saving { margin-top:8px; padding:7px 9px; font-size:10.5px; }
 
   .free-notice { padding:10px 12px; margin-bottom:12px; border-radius:12px; font-size:11px; line-height:1.5; }
   .flist li { gap:7px; padding:4px 0; font-size:12px; line-height:1.55; }
@@ -1056,8 +1090,8 @@ body {
         <p class="hero-sub">统一外勤过程、知识与客户资产，为 AI 建立真实的数据底座。</p>
         <div class="hero-stats">
           <div class="hero-stat"><strong>150 人</strong>首期覆盖</div>
-          <div class="hero-stat"><strong id="hero_quote">¥80,700</strong>建议年费</div>
-          <div class="hero-stat"><strong>3 个月</strong>首批落地</div>
+          <div class="hero-stat"><strong id="hero_quote">¥108,000</strong>建议年费</div>
+          <div class="hero-stat"><strong>3 个</strong>AI 基础包</div>
         </div>
       </div>
       <div class="hero-visual">
@@ -1150,78 +1184,43 @@ body {
 <div class="sec" style="padding-top:36px;">
   <div class="wrap">
     <div class="sec-eyebrow">报价明细</div>
-    <h2 class="sec-title">按需配置，实时计价</h2>
-    <p class="sec-desc">按本冠团队结构分档配置。请填写实际人数，自动计算年费。</p>
+    <h2 class="sec-title">双方案对比，领航优先</h2>
+    <p class="sec-desc">只比较企业领航版与企业标准版。两套方案均覆盖 75 个企业席位、75 个一线席位，并按规则绑定 3 个 AI 基础包。</p>
 
-    <!-- 企业标准版 -->
-    <div class="pcard pcard-blue">
-      <div class="pcard-head">
-        <div class="pcard-head-left">
-          <div class="pcard-icon" style="background:rgba(51,112,255,0.08);">🏢</div>
-          <div class="pcard-name">飞书Office 企业标准版</div>
-        </div>
-        <div class="pcard-tag tag-blue">核心</div>
-      </div>
-      <div class="pcard-price">
-        <span class="price-old">¥1,320</span>
-        <span class="price-now">¥1,056</span>
-        <span class="price-unit">/ 账号 / 年（80%）</span>
-      </div>
-      <div class="pcard-desc">适用：管理层、运营、财务、人事、行政、教育培训、项目管理<br>完整飞书能力：文档协作、多维表格、审批、知识库、仪表盘、OKR、工作台</div>
-      <div class="pcard-input">
-        <label>填写人数</label>
-        <input type="number" id="qty_pro" value="50" min="0" oninput="calc()">
-        <span class="pcard-sub">小计 <strong id="sub_pro">52,800</strong> 元</span>
-      </div>
-    </div>
-
-    <!-- 一线版 -->
-    <div class="pcard">
-      <div class="pcard-head">
-        <div class="pcard-head-left">
-          <div class="pcard-icon" style="background:rgba(255,192,0,0.1);">👥</div>
-          <div class="pcard-name">飞书一线版</div>
-        </div>
-        <div class="pcard-tag tag-blue">前线</div>
-      </div>
-      <div class="pcard-price">
-        <span class="price-now">¥180</span>
-        <span class="price-unit">/ 账号 / 年</span>
-      </div>
-      <div class="pcard-desc">适用：一线服务老师、美容院前端人员、客户沟通岗<br>功能覆盖：即时消息、日程管理、任务管理、审批、通讯录<br>⚠️ 一线版必须依附于企业标准版购买</div>
-      <div class="pcard-input">
-        <label>填写人数</label>
-        <input type="number" id="qty_front" value="100" min="0" oninput="calc()">
-        <span class="pcard-sub">小计 <strong id="sub_front">18,000</strong> 元</span>
-      </div>
-    </div>
-
-    <!-- AI版本单选 -->
-    <div class="pcard ai-plan-card">
-      <div class="ai-plan-intro"><div><h3>选择飞书 AI 版本</h3><p>两种版本均为企业共享额度，选择后自动计入年费。</p></div><div class="ai-plan-note">默认推荐基础版</div></div>
-      <div class="ai-choice-grid">
-        <label class="ai-choice">
-          <input type="radio" name="ai_plan" value="9900" data-name="AI基础版" checked onchange="calc()">
-          <div class="ai-choice-card">
-            <div class="ai-choice-badge">轻量起步 · 推荐</div>
-            <h4>飞书 AI 基础版</h4>
-            <div class="ai-choice-price"><strong>¥9,900</strong><span>/ 企业 / 年</span></div>
-            <div class="ai-choice-quota"><span>企业共享 AI 额度</span><strong>18 万点 / 年</strong></div>
-            <ul class="ai-choice-features"><li>企业知识问答与联网搜索体验权益</li><li>智能会议纪要与智能面试总结</li><li>aily 智能伙伴、智能体及工作流搭建</li><li>多维表格 AI、文档 AI 与飞书项目 AI</li><li>标准自助服务</li></ul>
+    <div class="quote-plan-grid">
+      <label class="quote-plan-option">
+        <input type="radio" name="quote_plan" value="adv" checked onchange="calc()">
+        <div class="quote-plan-card recommended">
+          <div class="quote-plan-badge">推荐方案 · 席位最低 6 折</div>
+          <h3>企业领航版方案</h3>
+          <div class="quote-plan-subtitle">更高版本，当前商务条件下总价更低</div>
+          <div class="quote-plan-price"><strong>¥108,000</strong><span>/ 年</span></div>
+          <div class="quote-formulas">
+            <div class="quote-formula"><span>企业领航版 75 席</span><strong>¥64,800</strong></div>
+            <div class="quote-formula"><span>折后单价 ¥864 / 席 / 年</span><strong>6 折</strong></div>
+            <div class="quote-formula"><span>一线标准版 75 席</span><strong>¥13,500</strong></div>
+            <div class="quote-formula"><span>AI 基础包 × 3</span><strong>¥29,700</strong></div>
           </div>
-        </label>
-        <label class="ai-choice">
-          <input type="radio" name="ai_plan" value="99000" data-name="AI企业版" onchange="calc()">
-          <div class="ai-choice-card">
-            <div class="ai-choice-badge">规模化使用</div>
-            <h4>飞书 AI 企业版</h4>
-            <div class="ai-choice-price"><strong>¥99,000</strong><span>/ 企业 / 年</span></div>
-            <div class="ai-choice-quota"><span>企业共享 AI 额度</span><strong>200 万点 / 年</strong></div>
-            <ul class="ai-choice-features"><li>完整企业知识问答、联网搜索与深度检索</li><li>包含基础版的智能纪要和各项 AI 能力</li><li>支持飞书 aily API / SDK 接口调用</li><li>适合智能体、工作流及知识问答规模化使用</li><li>AI 知识管理专项服务</li></ul>
+          <div class="quote-plan-rule"><b>购买条件：</b>企业领航版至少绑定 3 个 ¥9,900 的 AI 基础包。</div>
+          <div class="quote-plan-saving">同等席位与 AI 配置，比企业标准版省 ¥14,400 / 年</div>
+        </div>
+      </label>
+      <label class="quote-plan-option">
+        <input type="radio" name="quote_plan" value="std" onchange="calc()">
+        <div class="quote-plan-card">
+          <div class="quote-plan-badge">备选方案 · 企业标准起步</div>
+          <h3>企业标准版方案</h3>
+          <div class="quote-plan-subtitle">企业采购的最低版本边界</div>
+          <div class="quote-plan-price"><strong>¥122,400</strong><span>/ 年</span></div>
+          <div class="quote-formulas">
+            <div class="quote-formula"><span>企业标准版 75 席</span><strong>¥79,200</strong></div>
+            <div class="quote-formula"><span>折后单价 ¥1,056 / 席 / 年</span><strong>8 折</strong></div>
+            <div class="quote-formula"><span>一线标准版 75 席</span><strong>¥13,500</strong></div>
+            <div class="quote-formula"><span>AI 基础包 × 3</span><strong>¥29,700</strong></div>
           </div>
-        </label>
-      </div>
-      <div class="ai-common"><strong>共同包含</strong><span>智能纪要、飞书 aily、多维表格 AI、文档 AI、妙搭、飞书项目 AI、飞书集成平台 AI及生态应用 AI。</span></div>
+          <div class="quote-plan-rule"><b>方案边界：</b>企业标准版为本冠的最低可选版本。</div>
+        </div>
+      </label>
     </div>
 
     <!-- 信为美辅助落地 -->
@@ -1253,36 +1252,36 @@ body {
 
     <!-- TOTAL -->
     <div class="total">
-      <div class="total-label">年费合计</div>
-      <div class="total-num" id="grand">¥ 80,700</div>
-      <div class="total-detail" id="breakdown">企业标准版 ¥52,800 + 一线版 ¥18,000 + AI基础版 ¥9,900 + 落地 ¥0（免单）</div>
-      <div class="total-save">🎉 首批合作免单，省 ¥30,000</div>
+      <div class="total-label" id="total_label">推荐方案年费合计</div>
+      <div class="total-num" id="grand">¥ 108,000</div>
+      <div class="total-detail" id="breakdown">企业领航版 75席 ¥64,800 + 一线标准版 75席 ¥13,500 + AI基础包×3 ¥29,700 + 落地 ¥0（免单）</div>
+      <div class="total-save" id="total_save">企业领航版 6 折 · 比企业标准版省 ¥14,400 / 年</div>
     </div>
 
-    <!-- 新旧方案对比 -->
+    <!-- 企业领航版与企业标准版对比 -->
     <div class="quote-compare" style="background:white;border:1px solid #DEE0E3;border-radius:24px;padding:32px;margin-bottom:24px;">
-      <h3 style="font-size:20px;font-weight:600;color:#1F2329;margin-bottom:20px;">📊 新旧方案对比</h3>
-      <p style="font-size:14px;color:#646A73;margin-bottom:20px;">同样覆盖本冠150人全员上线，看看新方案省在哪里。</p>
+      <h3 style="font-size:20px;font-weight:600;color:#1F2329;margin-bottom:20px;">📊 企业版本方案对比</h3>
+      <p style="font-size:14px;color:#646A73;margin-bottom:20px;">两套方案均为 75 个企业席位 + 75 个一线席位 + 3 个 AI 基础包；企业标准版为最低版本边界。</p>
       <div class="mobile-scroll-hint" style="display:none;">左右滑动查看完整对比 →</div>
       <div class="compare-table-wrap" style="overflow-x:auto;">
         <table class="compare-table" style="width:100%;border-collapse:collapse;font-size:14px;">
-          <thead><tr style="border-bottom:2px solid #DEE0E3;"><th style="text-align:left;padding:12px 8px;color:#8F959E;font-weight:500;">对比项</th><th style="text-align:center;padding:12px 8px;color:#8F959E;font-weight:500;">原方案（飞书报价PDF）</th><th style="text-align:center;padding:12px 8px;color:#3370FF;font-weight:600;">新方案（本报价）</th></tr></thead>
+          <thead><tr style="border-bottom:2px solid #DEE0E3;"><th style="text-align:left;padding:12px 8px;color:#8F959E;font-weight:500;">对比项</th><th style="text-align:center;padding:12px 8px;color:#3370FF;font-weight:600;">企业领航版（推荐）</th><th style="text-align:center;padding:12px 8px;color:#8F959E;font-weight:500;">企业标准版（备选）</th></tr></thead>
           <tbody>
-            <tr style="border-bottom:1px solid #F0F0F0;"><td style="padding:14px 8px;color:#646A73;">配置方式</td><td style="padding:14px 8px;text-align:center;color:#8F959E;">150人全买同一版本</td><td style="padding:14px 8px;text-align:center;color:#1F2329;font-weight:500;">管理层+一线分档配置</td></tr>
-            <tr style="border-bottom:1px solid #F0F0F0;"><td style="padding:14px 8px;color:#646A73;">管理岗（50人）</td><td style="padding:14px 8px;text-align:center;color:#8F959E;">商业专业版 ¥960/人</td><td style="padding:14px 8px;text-align:center;color:#1F2329;font-weight:500;">企业标准版 ¥1,056/人</td></tr>
-            <tr style="border-bottom:1px solid #F0F0F0;"><td style="padding:14px 8px;color:#646A73;">一线老师（100人）</td><td style="padding:14px 8px;text-align:center;color:#8F959E;">商业专业版 ¥960/人<br><span style="font-size:12px;color:#8F959E;">（功能浪费，一线用不到）</span></td><td style="padding:14px 8px;text-align:center;color:#1F2329;font-weight:500;">一线版 ¥180/人<br><span style="font-size:12px;color:#00B894;">（功能刚好够用）</span></td></tr>
-            <tr style="border-bottom:1px solid #F0F0F0;"><td style="padding:14px 8px;color:#646A73;">AI版本</td><td style="padding:14px 8px;text-align:center;color:#8F959E;">✅ AI基础版</td><td style="padding:14px 8px;text-align:center;color:#00B894;"><span id="compare_ai_name">AI基础版</span> ✅</td></tr>
-            <tr style="border-bottom:1px solid #F0F0F0;"><td style="padding:14px 8px;color:#646A73;">行业落地服务</td><td style="padding:14px 8px;text-align:center;color:#8F959E;">❌ 无</td><td style="padding:14px 8px;text-align:center;color:#00B894;">✅ 含3个月（首批免单）</td></tr>
-            <tr style="border-bottom:1px solid #F0F0F0;"><td style="padding:14px 8px;color:#646A73;">全员覆盖</td><td style="padding:14px 8px;text-align:center;color:#8F959E;">150人</td><td style="padding:14px 8px;text-align:center;color:#00B894;">150人 ✅</td></tr>
-            <tr style="border-bottom:2px solid #DEE0E3;"><td style="padding:16px 8px;color:#1F2329;font-weight:600;">年费合计（示例50+100）</td><td style="padding:16px 8px;text-align:center;"><span style="font-size:24px;font-weight:600;color:#8F959E;text-decoration:line-through;">¥125,100</span></td><td style="padding:16px 8px;text-align:center;"><span id="compare_total" style="font-size:28px;font-weight:600;color:#3370FF;">¥80,700</span></td></tr>
+            <tr style="border-bottom:1px solid #F0F0F0;"><td style="padding:14px 8px;color:#646A73;">企业席位版本</td><td style="padding:14px 8px;text-align:center;color:#3370FF;font-weight:600;">企业领航版 75席</td><td style="padding:14px 8px;text-align:center;color:#646A73;">企业标准版 75席</td></tr>
+            <tr style="border-bottom:1px solid #F0F0F0;"><td style="padding:14px 8px;color:#646A73;">席位目录价</td><td style="padding:14px 8px;text-align:center;">¥1,440 / 席 / 年</td><td style="padding:14px 8px;text-align:center;">¥1,320 / 席 / 年</td></tr>
+            <tr style="border-bottom:1px solid #F0F0F0;"><td style="padding:14px 8px;color:#646A73;">折扣与折后单价</td><td style="padding:14px 8px;text-align:center;color:#00A98F;font-weight:600;">6折 · ¥864 / 席</td><td style="padding:14px 8px;text-align:center;">8折 · ¥1,056 / 席</td></tr>
+            <tr style="border-bottom:1px solid #F0F0F0;"><td style="padding:14px 8px;color:#646A73;">企业席位小计</td><td style="padding:14px 8px;text-align:center;">¥64,800</td><td style="padding:14px 8px;text-align:center;">¥79,200</td></tr>
+            <tr style="border-bottom:1px solid #F0F0F0;"><td style="padding:14px 8px;color:#646A73;">一线标准版</td><td style="padding:14px 8px;text-align:center;">75席 · ¥13,500</td><td style="padding:14px 8px;text-align:center;">75席 · ¥13,500</td></tr>
+            <tr style="border-bottom:1px solid #F0F0F0;"><td style="padding:14px 8px;color:#646A73;">AI 基础包</td><td style="padding:14px 8px;text-align:center;color:#00A98F;font-weight:600;">3个 · ¥29,700（购买条件）</td><td style="padding:14px 8px;text-align:center;">3个 · ¥29,700</td></tr>
+            <tr style="border-bottom:2px solid #DEE0E3;"><td style="padding:16px 8px;color:#1F2329;font-weight:600;">年费合计</td><td style="padding:16px 8px;text-align:center;"><span style="font-size:28px;font-weight:600;color:#3370FF;">¥108,000</span></td><td style="padding:16px 8px;text-align:center;"><span style="font-size:24px;font-weight:600;color:#8F959E;">¥122,400</span></td></tr>
           </tbody>
         </table>
       </div>
-      <div class="compare-saving" style="margin-top:20px;padding:16px 24px;background:rgba(0,214,185,0.06);border-radius:16px;display:flex;align-items:center;gap:12px;"><span style="font-size:24px;">💰</span><span style="font-size:16px;color:#1F2329;"><span id="compare_diff_label">新方案每年节省</span> <strong id="compare_diff" style="color:#3370FF;font-size:20px;">¥44,400</strong>，且额外赠送价值¥30,000的行业辅助落地服务（首批免单）。</span></div>
+      <div class="compare-saving" style="margin-top:20px;padding:16px 24px;background:rgba(0,214,185,0.06);border-radius:16px;display:flex;align-items:center;gap:12px;"><span style="font-size:24px;">💰</span><span style="font-size:16px;color:#1F2329;">在席位数与 AI 基础包数量完全一致的前提下，企业领航版 <strong style="color:#3370FF;font-size:20px;">每年节省 ¥14,400</strong>，且版本层级更高，因此作为本冠首选。</span></div>
     </div>
 
     <div class="callout">
-      <p><strong>参考示例：</strong>如本冠有50名管理岗、100名一线老师：<br>企业标准版 1,056×50 = 52,800 + 一线版 180×100 = 18,000 + <span id="ref_ai_name">AI基础版</span> <span id="ref_ai_price">9,900</span> + 落地 0（免单）= <strong id="ref_total">80,700元/年</strong><br>对比原方案（150人全买商业专业版125,100元/年），<span id="ref_diff_label">年费节省</span> <strong id="ref_diff">44,400元</strong>，且全员上线 + 含3个月行业辅助落地（免单）。</p>
+      <p><strong>采购结论：</strong>本冠最低版本边界为企业标准版。基于本次正式报价，企业领航版席位可享 6 折，但必须同时购买至少 3 个 AI 基础包；满足条件后总价为 <strong>108,000 元/年</strong>，低于企业标准版同配置的 122,400 元/年。</p>
     </div>
   </div>
 </div>
@@ -1292,11 +1291,11 @@ body {
   <div class="wrap">
     <div class="sec-eyebrow">设计逻辑</div>
     <h2 class="sec-title">为什么这样配置</h2>
-    <p class="sec-desc">本冠是渠道医美公司，150人团队的使用场景天然分两类。</p>
+    <p class="sec-desc">本冠 150 人按 75 个企业席位与 75 个一线席位分档配置，企业席位只在领航版与标准版之间选择。</p>
     <div class="logic-stack">
-      <div class="logic-step" data-code="01"><div class="logic-badge">M</div><div class="logic-body"><h3>管理与职能：完整经营中枢</h3><p>经营看板、审批、项目数据与知识管理集中在一个工作入口，让管理层能够持续看到业务过程。</p><div class="logic-tags"><span>仪表盘</span><span>审批</span><span>知识库</span><span>OKR</span></div></div></div>
-      <div class="logic-step" data-code="02"><div class="logic-badge">F</div><div class="logic-body"><h3>一线团队：轻量现场终端</h3><p>保留沟通、日报、任务和通知，让一线低门槛进入统一协同网络，功能够用且成本可控。</p><div class="logic-tags"><span>消息</span><span>日报</span><span>任务</span><span>通讯录</span></div></div></div>
-      <div class="logic-step" data-code="03"><div class="logic-badge">AI</div><div class="logic-body"><h3>AI 版本：从记录到洞察</h3><p>自动汇总现场数据、生成周报、识别异常，把分散记录转化为管理层可以使用的经营信号。</p><div class="logic-tags"><span>智能纪要</span><span>数据摘要</span><span>异常提醒</span></div></div></div>
+      <div class="logic-step" data-code="01"><div class="logic-badge">M</div><div class="logic-body"><h3>企业席位 75：领航版优先</h3><p>管理、运营及职能人员使用完整企业能力。当前领航版席位 6 折后单价更低，作为首选；标准版保留为最低备选。</p><div class="logic-tags"><span>企业领航版</span><span>6折</span><span>75席</span><span>版本更高</span></div></div></div>
+      <div class="logic-step" data-code="02"><div class="logic-badge">F</div><div class="logic-body"><h3>一线席位 75：轻量现场终端</h3><p>一线老师保留沟通、日报、任务和通知，以 ¥180 / 席 / 年进入统一协同网络，功能够用且成本可控。</p><div class="logic-tags"><span>一线标准版</span><span>75席</span><span>日报</span><span>任务</span></div></div></div>
+      <div class="logic-step" data-code="03"><div class="logic-badge">AI</div><div class="logic-body"><h3>AI 基础包 × 3：采购必要条件</h3><p>企业领航版至少绑定 3 个 ¥9,900 的 AI 基础包，同时用于智能纪要、知识问答、数据摘要与经营分析。</p><div class="logic-tags"><span>3个基础包</span><span>智能纪要</span><span>知识问答</span><span>经营分析</span></div></div></div>
       <div class="logic-step" data-code="04"><div class="logic-badge">FDE</div><div class="logic-body"><h3>行业落地：把工具装进流程</h3><p>围绕渠道医美的销售、客户和培训流程完成配置、培训与持续迭代，确保系统真正用起来。</p><div class="logic-tags"><span>业务模板</span><span>全员培训</span><span>持续伴飞</span></div></div></div>
     </div>
   </div>
@@ -1308,7 +1307,7 @@ body {
     <div class="sec-eyebrow">范围</div>
     <h2 class="sec-title">报价包含与不包含</h2>
     <div class="two-col">
-      <div class="col-white col-box"><div class="col-h">✅ 包含</div><ul class="flist"><li>飞书Office企业标准版（按填写人数，1年）</li><li>飞书一线版（按填写人数，1年）</li><li>飞书AI版本 × 1（按上方选择，1年）</li><li>飞书官方客户成功服务</li><li>信为美辅助落地服务（3个月，首批免单）</li></ul></div>
+      <div class="col-white col-box"><div class="col-h">✅ 包含</div><ul class="flist"><li>企业领航版或企业标准版 × 75席（按上方方案）</li><li>一线标准版 × 75席（1年）</li><li>AI 基础包 × 3（每个 ¥9,900）</li><li>飞书官方客户成功服务</li><li>信为美辅助落地服务（3个月，首批免单）</li></ul></div>
       <div class="col-gray col-box"><div class="col-h" style="color:#646A73;">不包含</div><ul class="flist"><li style="opacity:0.5;">定制开发费用（另议）</li><li style="opacity:0.5;">飞书人事/绩效/招聘等独立产品</li><li style="opacity:0.5;">第三方系统集成费用</li></ul></div>
     </div>
   </div>
@@ -1335,7 +1334,7 @@ body {
     <p class="sec-desc">飞书是AI时代的先进生产力平台，从协同办公到业务管控，一个飞书都能搞定。</p>
     <div class="two-col">
       <div class="col-white col-box"><div class="col-h">飞书Office 核心能力</div><ul class="flist"><li>企业即时沟通（PC/移动/网页端）</li><li>云文档（知识沉淀、过程资产）</li><li>多维表格（轻量化业务系统+数据大屏）</li><li>知识库（企业级知识管理）</li><li>音视频会议（多语种字幕+翻译）</li><li>任务管理（待办线上化、移动化）</li><li>审批中心（一站式OA审批）</li><li>目标管理OKR（战略拆解落地）</li><li>工作台（千人千面门户）</li><li>飞书汇报（自动汇总+可视化）</li></ul></div>
-      <div class="col-white col-box" style="border-color:#3370FF;"><div class="col-h">飞书AI能力 <span style="font-size:12px;color:#3370FF;font-weight:400;">两种AI版本均包含</span></div><ul class="flist"><li><strong style="color:#1F2329;font-weight:600;">智能会议纪要</strong>：自动转写、总结、分配待办</li><li><strong style="color:#1F2329;font-weight:600;">飞书智能伙伴</strong>：文档创作、知识问答、数据摘要</li><li><strong style="color:#1F2329;font-weight:600;">多维表格AI</strong>：字段捷径、智能解释、异常提醒</li><li><strong style="color:#1F2329;font-weight:600;">飞书汇报</strong>：日报自动汇总，管理层可视看板</li></ul><div class="callout" style="margin-top:16px;padding:16px 20px;"><p style="font-size:14px;">AI能力建立在数据基础上——全员上线飞书、一线老师每天填日报，AI才有东西可以总结。<strong>先有数据底座，AI才有价值。</strong></p></div></div>
+      <div class="col-white col-box" style="border-color:#3370FF;"><div class="col-h">飞书AI能力 <span style="font-size:12px;color:#3370FF;font-weight:400;">本方案含 3 个 AI 基础包</span></div><ul class="flist"><li><strong style="color:#1F2329;font-weight:600;">智能会议纪要</strong>：自动转写、总结、分配待办</li><li><strong style="color:#1F2329;font-weight:600;">飞书智能伙伴</strong>：文档创作、知识问答、数据摘要</li><li><strong style="color:#1F2329;font-weight:600;">多维表格AI</strong>：字段捷径、智能解释、异常提醒</li><li><strong style="color:#1F2329;font-weight:600;">飞书汇报</strong>：日报自动汇总，管理层可视看板</li></ul><div class="callout" style="margin-top:16px;padding:16px 20px;"><p style="font-size:14px;">AI能力建立在数据基础上——全员上线飞书、一线老师每天填日报，AI才有东西可以总结。<strong>先有数据底座，AI才有价值。</strong></p></div></div>
     </div>
   </div>
 </div>
@@ -1345,9 +1344,9 @@ body {
   <div class="wrap">
     <div class="sec-eyebrow">下一步</div>
     <h2 class="sec-title">立即签约上线</h2>
-    <p class="sec-desc">确认人数和版本后，轮动科技出具正式合同，3个工作日内完成开通。</p>
+    <p class="sec-desc">确认企业领航版或企业标准版方案后，轮动科技出具正式合同，3个工作日内完成开通。</p>
     <div class="sign-console">
-      <div class="sign-steps"><div class="sign-step"><small>STEP 01</small><strong>确认账号人数与版本</strong></div><div class="sign-step"><small>STEP 02</small><strong>轮动科技出具正式合同</strong></div><div class="sign-step"><small>STEP 03</small><strong>3 个工作日内开通</strong></div></div>
+      <div class="sign-steps"><div class="sign-step"><small>STEP 01</small><strong>确认领航版或标准版方案</strong></div><div class="sign-step"><small>STEP 02</small><strong>轮动科技出具正式合同</strong></div><div class="sign-step"><small>STEP 03</small><strong>3 个工作日内开通</strong></div></div>
       <div class="sign-meta"><div><span>官方签约方</span><strong>深圳轮动科技有限公司</strong></div><div><span>行业落地团队</span><strong>信为美 · 首批合作免单</strong></div><div><span>报价有效期</span><strong>2026 年 7 月 31 日前</strong></div></div>
     </div>
   </div>
@@ -1357,37 +1356,23 @@ body {
 <div style="background:#1F2329;padding:40px 0;text-align:center;">
   <div class="wrap">
     <div style="font-size:14px;color:#8F959E;margin-bottom:8px;">本冠生物科技（上海）有限公司 × 深圳轮动科技有限公司</div>
-    <div style="font-size:12px;color:#5C5F66;">飞书上线报价方案 · 2026.7.11 · 本报价仅供本冠集团内部参考</div>
+    <div style="font-size:12px;color:#5C5F66;">飞书上线报价方案 · 2026.7.15 · 本报价仅供本冠集团内部参考</div>
   </div>
 </div>
 
 <script>
 function calc(){
-  var pro=parseInt(document.getElementById('qty_pro').value)||0;
-  var front=parseInt(document.getElementById('qty_front').value)||0;
-  var sub_pro=pro*1056;
-  var sub_front=front*180;
-  var selectedAi=document.querySelector('input[name="ai_plan"]:checked');
-  var ai=selectedAi ? parseInt(selectedAi.value) : 9900;
-  var aiName=selectedAi ? selectedAi.dataset.name : 'AI基础版';
-  var total=sub_pro+sub_front+ai;
-  var originalTotal=125100;
-  var difference=originalTotal-total;
-  var differenceText=Math.abs(difference).toLocaleString();
-  document.getElementById('sub_pro').textContent=sub_pro.toLocaleString();
-  document.getElementById('sub_front').textContent=sub_front.toLocaleString();
+  var selected=document.querySelector('input[name="quote_plan"]:checked');
+  var plan=selected ? selected.value : 'adv';
+  var isAdv=plan==='adv';
+  var total=isAdv ? 108000 : 122400;
+  var planName=isAdv ? '企业领航版' : '企业标准版';
+  var seatSubtotal=isAdv ? 64800 : 79200;
   document.getElementById('grand').textContent='¥ '+total.toLocaleString();
   document.getElementById('hero_quote').textContent='¥'+total.toLocaleString();
-  document.getElementById('breakdown').textContent='企业标准版 ¥'+sub_pro.toLocaleString()+' + 一线版 ¥'+sub_front.toLocaleString()+' + '+aiName+' ¥'+ai.toLocaleString()+' + 落地 ¥0（免单）';
-  document.getElementById('compare_ai_name').textContent=aiName;
-  document.getElementById('compare_total').textContent='¥'+total.toLocaleString();
-  document.getElementById('compare_diff_label').textContent=difference>=0 ? '新方案每年节省' : '选择企业版后，相比原方案年费增加';
-  document.getElementById('compare_diff').textContent='¥'+differenceText;
-  document.getElementById('ref_ai_name').textContent=aiName;
-  document.getElementById('ref_ai_price').textContent=ai.toLocaleString();
-  document.getElementById('ref_total').textContent=total.toLocaleString()+'元/年';
-  document.getElementById('ref_diff_label').textContent=difference>=0 ? '年费节省' : '年费增加';
-  document.getElementById('ref_diff').textContent=differenceText+'元';
+  document.getElementById('total_label').textContent=isAdv ? '推荐方案年费合计' : '备选方案年费合计';
+  document.getElementById('breakdown').textContent=planName+' 75席 ¥'+seatSubtotal.toLocaleString()+' + 一线标准版 75席 ¥13,500 + AI基础包×3 ¥29,700 + 落地 ¥0（免单）';
+  document.getElementById('total_save').textContent=isAdv ? '企业领航版 6 折 · 比企业标准版省 ¥14,400 / 年' : '企业标准版 8 折 · 本冠采购的最低版本边界';
 }
 calc();
 </script>
