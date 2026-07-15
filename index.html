@@ -194,7 +194,8 @@ body {
 .flow-node:nth-child(5) .flow-icon { background: rgba(0,214,185,0.12); color: #009B83; }
 .flow-step { color:#B0B6C0; font-size:11px; font-weight:800; letter-spacing:1.4px; }
 .flow-label { color: #8F959E; font-size: 12px; font-weight: 600; letter-spacing: 1px; margin-bottom: 4px; }
-.flow-title { font-size: 21px; font-weight: 700; margin-bottom: 14px; }
+.flow-title { font-size: 21px; font-weight: 700; margin-bottom: 7px; }
+.flow-note { color:#717986; font-size:12px; line-height:1.55; margin-bottom:12px; }
 .flow-items { display: flex; flex-wrap: wrap; gap: 7px; }
 .flow-items span { padding: 6px 10px; border:1px solid transparent; border-radius: 999px; font-size: 12px; font-weight:500; }
 .flow-node:nth-child(1) .flow-items span { background:#EEF4FF; border-color:#DDE8FF; color:#4A69A8; }
@@ -573,10 +574,26 @@ body {
   .hero-stat { padding: 10px 6px; font-size: 10px; }
   .hero-stat strong { font-size: 15px; }
   .sec-title { font-size: 24px; }
-  .value-title { font-size: 24px; }
-  .flow-map { grid-template-columns: 1fr; gap: 10px; }
-  .flow-node { min-height: auto; }
-  .flow-arrow { transform: rotate(90deg); height: 28px; }
+  .value-sec { padding:36px 0 42px; }
+  .value-head { margin-bottom:22px; }
+  .value-kicker { font-size:11px; margin-bottom:9px; }
+  .value-title { font-size:23px; line-height:1.28; margin-bottom:8px; }
+  .value-desc { font-size:13px; line-height:1.6; }
+  .flow-map { grid-template-columns: 1fr; gap: 6px; }
+  .flow-node { min-height:0; padding:16px 16px 15px; border-radius:19px; display:grid; grid-template-columns:42px minmax(0,1fr); column-gap:13px; align-items:start; }
+  .flow-node::before { height:2px; }
+  .flow-top { grid-column:1; grid-row:1 / span 4; display:block; margin:0; }
+  .flow-icon { width:42px; height:42px; border-radius:13px; }
+  .flow-icon svg { width:21px; height:21px; }
+  .flow-step { position:absolute; top:15px; right:16px; font-size:8px; letter-spacing:1.1px; }
+  .flow-label { grid-column:2; padding-right:62px; font-size:9px; line-height:1.2; letter-spacing:.8px; margin-bottom:2px; }
+  .flow-title { grid-column:2; font-size:17px; line-height:1.3; margin-bottom:3px; }
+  .flow-note { grid-column:2; font-size:10.5px; line-height:1.45; margin-bottom:7px; }
+  .flow-items { grid-column:2; gap:4px; }
+  .flow-items span { padding:4px 7px; font-size:10px; line-height:1.15; }
+  .flow-arrow { transform:rotate(90deg); height:20px; }
+  .flow-arrow span { width:28px; height:28px; box-shadow:0 5px 12px rgba(51,112,255,.08); }
+  .flow-arrow svg { width:15px; height:15px; }
   .outcome-grid { grid-template-columns: 1fr; }
   .outcome-card { min-height: auto; }
   .trust-strip { grid-template-columns: 1fr 1fr 1fr; }
@@ -920,6 +937,7 @@ body {
         <div class="flow-top"><div class="flow-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10a2 2 0 0 1 2 2v4"/><path d="M7 20h10a2 2 0 0 0 2-2v-4"/><path d="M4 9v6"/><path d="m2 12 2 3 2-3"/><circle cx="17" cy="12" r="2.5"/></svg></div><div class="flow-step">STAGE 01</div></div>
         <div class="flow-label">INPUT</div>
         <div class="flow-title">一线现场</div>
+        <p class="flow-note">把每次拜访、反馈与市场变化持续记录下来。</p>
         <div class="flow-items"><span>拜访记录</span><span>客户反馈</span><span>竞品动态</span><span>日报</span></div>
       </div>
       <div class="flow-arrow"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m14 7 5 5-5 5"/></svg></span></div>
@@ -927,6 +945,7 @@ body {
         <div class="flow-top"><div class="flow-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></div><div class="flow-step">STAGE 02</div></div>
         <div class="flow-label">DATA FOUNDATION</div>
         <div class="flow-title">公司数据底座</div>
+        <p class="flow-note">统一沉淀客户、知识与经营过程，形成公司资产。</p>
         <div class="flow-items"><span>飞书协同</span><span>知识库</span><span>一客一档</span><span>经营看板</span></div>
       </div>
       <div class="flow-arrow"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m14 7 5 5-5 5"/></svg></span></div>
@@ -934,6 +953,7 @@ body {
         <div class="flow-top"><div class="flow-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8 14 8l5.2 2-5.2 2-2 5.2-2-5.2-5.2-2L10 8l2-5.2Z"/><path d="m18.5 15 .8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z"/></svg></div><div class="flow-step">STAGE 03</div></div>
         <div class="flow-label">OUTPUT</div>
         <div class="flow-title">AI 经营能力</div>
+        <p class="flow-note">自动提炼经营信号，让管理决策更快、更准。</p>
         <div class="flow-items"><span>自动汇总</span><span>异常预警</span><span>知识问答</span><span>经营分析</span></div>
       </div>
     </div>
